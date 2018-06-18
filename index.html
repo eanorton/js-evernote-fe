@@ -2,26 +2,51 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <title>Evernote</title>
+    <style>
+    img {
+      max-height: 200px;
+    }
+    textarea {
+      width: 100%;
+    }
+  </style>
   </head>
   <body>
 
     <h1>Your Notes</h1>
     <div>
+    <div class='row'>
 
-      <ul id="note-list">
+      <div class='col-md-4'>
+        <ul class="list-group" id="note-list">
+        </ul>
+      </div>
 
-      </ul>
+      <div class='col-md-8'>
+        <h2>NOTE DETAIL</h2>
+        <div id="note-detail">
+      
+        </div>
+      </div>
+    </div>
 
-      <form id="form">
+        <form id="form">
 
-        <h3>NEW NOTE:</h3>
-        Title: <input type="text" id="note-title"><br>
-        Body: <input type="text" id="note-content"><br><br>
-        <input type="submit" id="submit" value="Submit">
-      </form>
+          <button type="button" class="btn btn-success">NEW NOTE</button>
+          Title: <input type="text" id="note-title"><br>
+          Body: <input type="text" id="note-content"><br><br>
+          <input type="submit" id="submit" value="Submit">
+
+        </form>
 
     </div>
+
+    <br><br>
+
     <script src="index.js"></script>
+
   </body>
 </html>
