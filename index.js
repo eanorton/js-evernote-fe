@@ -27,13 +27,13 @@ function displayUser(allUsers){
 // DISPLAY NOTES AS A LIST ON PAGE
 function displayNotes(allNotes){
   noteList.innerHTML = ""
-  allNotes.forEach(note=>noteList.innerHTML += `<li><h3>${note.title}</h3><p id="body">truncateNoteContent(${note.body})</p> <button class="delete" data-note-id="${note.id}">Delete</button><button class="update" data-note-id="${note.id}">Update</button></li>`)
+  allNotes.forEach(note=>noteList.innerHTML += `<li><h3>${note.title}</h3><p id="body">${truncateNoteContent(note.body)}</p> <button class="delete" data-note-id="${note.id}">Delete</button><button class="update" data-note-id="${note.id}">Update</button></li>`)
 }
 
-function truncateNoteContent() {
-  let body = document.getElementById("body")
-  var res = body.innerText.substring(0, 100);
-  body.innerHTML = res;
+function truncateNoteContent(body) {
+
+  var res = body.substring(0, 100) + "...";
+  return res;
 }
 
 // FUNCTION TO MAKE A NEW NOTEOBJECT AND PERSIST TO DATABASE, AND ADD TO THE BOTTOM OF OUR LIST
@@ -97,5 +97,6 @@ form.addEventListener('submit', function(event){
 })
 
 //RUN THE FUNCTION TO DISPLAY NOTES UPON LOADING PAGE
+
 fetchNotes();
 fetchUsers();
