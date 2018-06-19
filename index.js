@@ -9,6 +9,7 @@ const form = document.getElementById("form")
 const singleNoteDetail = document.getElementById("note-detail")
 
 
+
 // FETCH ALL USERS
 function fetchUsers() {
   fetch(userApiUrl).then(response=>response.json()).then(allUsers=>displayUser(allUsers))
@@ -42,25 +43,44 @@ function truncateNoteContent(body) {
 
 function renderNewNoteForm(){
 
-  singleNoteDetail.innerHTML += `<div class="form-group">
+  singleNoteDetail.innerHTML = ""
+
+  singleNoteDetail.innerHTML += `<div id="new-note-form" class="form-group">
     <label for="Title">NOTE TITLE</label>
-    <textarea class="form-control" id="example-title" rows="1"></textarea>
+    <textarea class="form-control" id="new-title" rows="1"></textarea>
     <label for="Content">NOTE CONTENT</label>
-    <textarea class="form-control" id="example-body" rows="3"></textarea>
+    <textarea class="form-control" id="new-body" rows="3"></textarea>
+    <br>
+    <button type="button" class="btn btn-success">SAVE NOTE</button>
   </div>`
 
-  makeNewNote();
+  let newNoteTitle = document.getElementById("new-title")
+  let newNoteBody = document.getElementById("new-body")
+  const newNoteForm = document.getElementById("new-note-form")
+
+  newNoteForm.addEventListener('click', function(event){
+
+    if (event.target.innerText === "SAVE NOTE"){
+      makeNewNote(event.target.parentElement)
+    }
+  })
 }
 
 // FUNCTION TO MAKE A NEW NOTEOBJECT AND PERSIST TO DATABASE, AND ADD TO THE BOTTOM OF OUR LIST
-function makeNewNote(){
+function makeNewNote(newNote){
+
+  let noteElements = Array.from(newNote.children)
+
   let configObj = {
     method:"POST",
-    body:JSON.stringify({title: `${noteTitle.value}`, body: `${noteContent.value}`,user_id:2}),
+    body:JSON.stringify({title: `${noteElements[1].value}`, body: `${noteElements[3].value}`,user_id:2}),
     headers:{'Content-Type':'application/json'}
   }
 
   fetch(noteApiUrl, configObj).then(response=>response.json()).then(fetchNotes)
+
+  noteElements[1].value = ""
+  noteElements[3].value = ""
 }
 
 //FUNCTION TO DELETE NOTEOBJ FROM DATABASE AND REMOVE FROM OUR LIST
@@ -94,6 +114,12 @@ function updateNote(note){
 
   fetch(`${noteApiUrl}/${noteElements[4].dataset.noteId}`, configObj).then(fetchNotes)
 }
+
+
+
+
+
+//------------ EVENT LISTENERS -----------------------------------------------------------
 
 //EVENT LISTENER FOR CLICKING UPDATE AND DELETE BUTTONS
 noteList.addEventListener('click', function(event){
@@ -132,6 +158,13 @@ singleNoteDetail.addEventListener('click', function(event){
     displaySingleNote(event.target.parentElement)
   }
 })
+
+
+
+//----------------------------------------------------------------------------------------
+
+
+
 
 //FUNCTION TO MAKE SINGLE NOTEDETAIL EDITABLE. IF THEY EDIT, SEND TO PATCH
 function makeNoteEditable(note){
