@@ -9,9 +9,6 @@ const form = document.getElementById("form")
 const singleNoteDetail = document.getElementById("note-detail")
 
 
-
-
-
 // FETCH ALL USERS
 function fetchUsers() {
   fetch(userApiUrl).then(response=>response.json()).then(allUsers=>displayUser(allUsers))
@@ -27,10 +24,13 @@ function displayUser(allUsers){
   allUsers.forEach(user=>console.table(user))
 }
 
+//h3-data-note-id="${note.id}" data-note-title="${note.title}" data-note-body="${note.body}"
+//p - data-note-id="${note.id}" data-note-body="${note.body}" data-note-title="${note.title}"
+
 // DISPLAY NOTES AS A LIST ON PAGE
 function displayNotes(allNotes){
   noteList.innerHTML = ""
-  allNotes.forEach(note=>noteList.innerHTML += `<li><h3 class="note-header" data-note-id="${note.id}" data-note-title="${note.title}" data-note-body="${note.body}">${note.title}</h3><p class="note-body" id="body" data-note-id="${note.id}" data-note-body="${note.body}" data-note-title="${note.title}">${truncateNoteContent(note.body)}</p> <button type="button" class="btn btn-danger" data-note-id="${note.id}">Delete</button><button type="button" class="btn btn-primary" class="update" data-note-id="${note.id}">Update</button></li>`)
+  allNotes.forEach(note=>noteList.innerHTML += `<li class="list-group-item" ><h3 class="note-header">${note.title}</h3><p class="note-body" id="body">${note.body}</p> <button type="button" class="btn btn-danger" data-note-id="${note.id}">Delete</button><button type="button" class="btn btn-primary" class="update" data-note-id="${note.id}">Update</button></li>`)
 }
 
 //FUNCTION TO SHORTEN THE AMOUNT OF NOTECONTENT THAT IS DISPLAYED
@@ -40,11 +40,23 @@ function truncateNoteContent(body) {
   return res;
 }
 
+function renderNewNoteForm(){
+
+  singleNoteDetail.innerHTML += `<div class="form-group">
+    <label for="Title">NOTE TITLE</label>
+    <textarea class="form-control" id="example-title" rows="1"></textarea>
+    <label for="Content">NOTE CONTENT</label>
+    <textarea class="form-control" id="example-body" rows="3"></textarea>
+  </div>`
+
+  makeNewNote();
+}
+
 // FUNCTION TO MAKE A NEW NOTEOBJECT AND PERSIST TO DATABASE, AND ADD TO THE BOTTOM OF OUR LIST
 function makeNewNote(){
   let configObj = {
     method:"POST",
-    body:JSON.stringify({title: `${noteTitle.value}`, body: `${noteContent.value}`,user_id:1}),
+    body:JSON.stringify({title: `${noteTitle.value}`, body: `${noteContent.value}`,user_id:2}),
     headers:{'Content-Type':'application/json'}
   }
 
@@ -71,40 +83,77 @@ function confirmDelete(id){
 }
 
 //FUNCTION TO UPDATE NOTEOBJ - CURRENTLY TAKING IN VALUE FROM THE NEW NOTEFIELD
-function updateNote(id){
+function updateNote(note){
+  let noteElements = Array.from(note.children)
+
   let configObj = {
     method:"PATCH",
-    body:JSON.stringify({title: `${noteTitle.value}`, body: `${noteContent.value}`,user_id:1}),
+    body:JSON.stringify({title: `${noteElements[0].innerText}`, body: `${noteElements[1].innerText}`,user_id:2}),
     headers:{'Content-Type':'application/json'}
   }
-  fetch(`${noteApiUrl}/${id}`, configObj).then(fetchNotes)
+
+  fetch(`${noteApiUrl}/${noteElements[4].dataset.noteId}`, configObj).then(fetchNotes)
 }
 
 //EVENT LISTENER FOR CLICKING UPDATE AND DELETE BUTTONS
 noteList.addEventListener('click', function(event){
 
   if (event.target.className === "btn btn-primary"){
-    console.log("NOT READY YET")//updateNote(event.target.dataset.noteId)
+    displaySingleNote(event.target.parentElement)//updateNote(event.target.dataset.noteId)
   } else if (event.target.className === "btn btn-danger"){
     confirmDelete(event.target.dataset.noteId)
   } else if(event.target.className === "note-header" || event.target.className === "note-body"){
-
-    displaySingleNote(event.target.dataset)
+    displaySingleNote(event.target.parentElement)
   }
 })
 
 //EVENT LISTENER FOR CLICKING THE SUBMIT AND MAKING NEW NOTEOBJ AT TOP OF WINDOW
-form.addEventListener('submit', function(event){
+form.addEventListener('click', function(event){
   event.preventDefault()
 
-  makeNewNote();
-  noteContent.value = "";
-  noteTitle.value = "";
+  if (event.target.innerText === "NEW NOTE"){
+    renderNewNoteForm();
+  }
+  // noteContent.value = "";
+  // noteTitle.value = "";
 
 })
+//EVENT LISTENER FOR CLICKING UPDATE OR DELETE ON THE SINGLE NOTEDETAIL
+singleNoteDetail.addEventListener('click', function(event){
+  if (event.target.className === "btn btn-primary"){
+    makeNoteEditable(event.target.parentElement)//updateNote(event.target.dataset.noteId)
+    if(event.target.innerText === "Update") {
+      updateNote(event.target.parentElement)//updateNote()
+    }
+  } else if (event.target.className === "btn btn-danger"){
+    confirmDelete(event.target.dataset.noteId)
+    singleNoteDetail.innerHTML = ""
+  } else if(event.target.className === "note-header" || event.target.className === "note-body"){
+    displaySingleNote(event.target.parentElement)
+  }
+})
+
+//FUNCTION TO MAKE SINGLE NOTEDETAIL EDITABLE. IF THEY EDIT, SEND TO PATCH
+function makeNoteEditable(note){
+  let noteElements = Array.from(note.children)
+  noteElements[0].contentEditable = "false"
+
+  if (noteElements[1].contentEditable == "true") {
+      noteElements[1].contentEditable = "false";
+      noteElements[4].innerText = "Update"
+  } else {
+      noteElements[0].contentEditable = "true";
+      noteElements[1].contentEditable = "true";
+      noteElements[4].innerText = "Save"
+
+  }
+}
 
 function displaySingleNote(note){
-  singleNoteDetail.innerHTML = `<h1>${note.noteTitle}</h1><p>${note.noteBody}</p>`
+  let noteElements = Array.from(note.children)
+
+
+  singleNoteDetail.innerHTML =  `<h1>${noteElements[0].innerText}</h1><p>${noteElements[1].innerText}</p><br><button type="button" class="btn btn-danger" data-note-id="${noteElements[2].dataset.noteId}">${noteElements[2].innerText}</button><button type="button" class="btn btn-primary" data-note-id="${noteElements[3].dataset.noteId}">${noteElements[3].innerText}</button>`
 }
 
 //RUN THE FUNCTION TO DISPLAY NOTES UPON LOADING PAGE
