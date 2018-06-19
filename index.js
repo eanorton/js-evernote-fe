@@ -59,15 +59,19 @@ function deleteNote(id){
 
 //FUNCTION TO UPDATE NOTEOBJ - CURRENTLY TAKING IN VALUE FROM THE NEW NOTEFIELD
 function updateNote(note){
+
   let noteElements = Array.from(note.children)
 
   let configObj = {
     method:"PATCH",
-    body:JSON.stringify({title: `${noteElements[0].innerText}`, body: `${noteElements[1].innerText}`,user_id:2}),
+    body:JSON.stringify({title: `${noteElements[2].value}`, body: `${noteElements[4].value}`,user_id:2}),
     headers:{'Content-Type':'application/json'}
   }
 
-  fetch(`${noteApiUrl}/${noteElements[4].dataset.noteId}`, configObj).then(fetchNotes)
+  fetch(`${noteApiUrl}/${noteElements[6].dataset.noteId}`, configObj).then(fetchNotes)
+
+  
+  singleNoteDetail.innerHTML = `<div class="panel-heading"><h1>${noteElements[2].value}</h1></div><div class="panel-body"><p>${noteElements[4].value}</p></div><br>`
 }
 
 
@@ -109,7 +113,7 @@ function renderNewNoteForm(){
     <label for="Title">NOTE TITLE</label>
     <textarea class="form-control" id="new-title" rows="1"></textarea>
     <label for="Content">NOTE CONTENT</label>
-    <textarea class="form-control" id="new-body" rows="3"></textarea>
+    <textarea class="form-control" id="new-body" rows="16"></textarea>
     <br>
     <button type="button" class="btn btn-success">SAVE NOTE</button>
   </div>`
@@ -128,6 +132,7 @@ function renderNewNoteForm(){
 }
 
 function displaySingleNote(note){
+
   let noteElements = Array.from(note.children)
 
 
@@ -185,7 +190,7 @@ form.addEventListener('click', function(event){
 singleNoteDetail.addEventListener('click', function(event){
   if (event.target.className === "btn btn-primary"){
     makeNoteEditable(event.target.parentElement)//updateNote(event.target.dataset.noteId)
-    if(event.target.innerText === "Update") {
+    if(event.target.innerText === "Save") {
       updateNote(event.target.parentElement)//updateNote()
     }
   } else if (event.target.className === "btn btn-danger"){
@@ -201,43 +206,47 @@ singleNoteDetail.addEventListener('click', function(event){
 
 
 
+// //FUNCTION TO UPDATE NOTEDETAIL. IF THEY EDIT, SEND TO PATCH
+function makeNoteEditable(note){
+
+  let noteElements = Array.from(note.children)
+
+
+  singleNoteDetail.innerHTML = `<div class="panel-heading"><div class="form-group"><h1>Update Note</h1></div>
+    <label for="Title">NOTE TITLE</label>
+    <textarea class="form-control" id="new-title" rows="1">${noteElements[0].innerText}</textarea>
+    <label for="Content">NOTE CONTENT</label>
+    <textarea class="form-control" id="new-body" rows="16">${noteElements[1].innerText}</textarea>
+    <br>
+    <button type="button" class="btn btn-success" id="update-btn" data-note-id="${noteElements[3].dataset.noteId}">SAVE NOTE</button>
+  </div>`
+
+  let updateBtn = document.getElementById("update-btn")
+
+  updateBtn.addEventListener('click', function(event){
+
+    if (event.target.innerText === "SAVE NOTE"){
+      updateNote(event.target.parentElement)
+
+    }
+  })
+}
+
 // //FUNCTION TO MAKE SINGLE NOTEDETAIL EDITABLE. IF THEY EDIT, SEND TO PATCH
 // function makeNoteEditable(note){
 //   let noteElements = Array.from(note.children)
+//   noteElements[0].contentEditable = "false"
 //
-//
-//   singleNoteDetail.addEventListener('click', function(event){
-//
-//     if(event.target.className === "btn btn-primary"){
-//       noteElements[1].innerHTML = `<div id="update-note-form" class="form-group">
-//         <label for="Title"> TITLE</label>
-//         <textarea class="form-control" id="new-title" rows="1">${noteElements[0].innerText}</textarea>
-//         <label for="Content"> CONTENT</label>
-//         <textarea class="form-control" id="new-body" rows="3">${noteElements[1].innerText}</textarea>
-//         <br>
-//       </div>`
-//       noteElements[4].innerText = "Save"
-//     } else if (event.target.innerText === "Update") {
+//   if (noteElements[1].contentEditable == "true") {
+//       noteElements[1].contentEditable = "false";
 //       noteElements[4].innerText = "Update"
-//     }
-//   })
+//   } else {
+//       noteElements[0].contentEditable = "true";
+//       noteElements[1].contentEditable = "true";
+//       noteElements[4].innerText = "Save"
+//
+//   }
 // }
-
-//FUNCTION TO MAKE SINGLE NOTEDETAIL EDITABLE. IF THEY EDIT, SEND TO PATCH
-function makeNoteEditable(note){
-  let noteElements = Array.from(note.children)
-  noteElements[0].contentEditable = "false"
-
-  if (noteElements[1].contentEditable == "true") {
-      noteElements[1].contentEditable = "false";
-      noteElements[4].innerText = "Update"
-  } else {
-      noteElements[0].contentEditable = "true";
-      noteElements[1].contentEditable = "true";
-      noteElements[4].innerText = "Save"
-
-  }
-}
 
 
 
