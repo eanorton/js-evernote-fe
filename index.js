@@ -30,7 +30,7 @@ function displayUser(allUsers){
 // DISPLAY NOTES AS A LIST ON PAGE
 function displayNotes(allNotes){
   noteList.innerHTML = ""
-  allNotes.forEach(note=>noteList.innerHTML += `<li><h3 class="note-header" data-note-id="${note.id}" data-note-title="${note.title}" data-note-body=${note.body}>${note.title}</h3><p class="note-body" id="body" data-note-id="${note.id}" data-note-body="${note.body}" data-note-title="${note.title}">${truncateNoteContent(note.body)}</p> <button type="button" class="btn btn-danger" data-note-id="${note.id}">Delete</button><button type="button" class="btn btn-primary" class="update" data-note-id="${note.id}">Update</button></li>`)
+  allNotes.forEach(note=>noteList.innerHTML += `<li><h3 class="note-header" data-note-id="${note.id}" data-note-title="${note.title}" data-note-body="${note.body}">${note.title}</h3><p class="note-body" id="body" data-note-id="${note.id}" data-note-body="${note.body}" data-note-title="${note.title}">${truncateNoteContent(note.body)}</p> <button type="button" class="btn btn-danger" data-note-id="${note.id}">Delete</button><button type="button" class="btn btn-primary" class="update" data-note-id="${note.id}">Update</button></li>`)
 }
 
 //FUNCTION TO SHORTEN THE AMOUNT OF NOTECONTENT THAT IS DISPLAYED
@@ -84,10 +84,11 @@ function updateNote(id){
 noteList.addEventListener('click', function(event){
 
   if (event.target.className === "btn btn-primary"){
-    updateNote(event.target.dataset.noteId)
+    console.log("NOT READY YET")//updateNote(event.target.dataset.noteId)
   } else if (event.target.className === "btn btn-danger"){
     confirmDelete(event.target.dataset.noteId)
   } else if(event.target.className === "note-header" || event.target.className === "note-body"){
+
     displaySingleNote(event.target.dataset)
   }
 })
@@ -103,7 +104,7 @@ form.addEventListener('submit', function(event){
 })
 
 function displaySingleNote(note){
-  console.log(note)//singleNoteDetail.innerHTML = `<h1>${note.noteTitle}</h1><p>${note.noteBody}</p>`
+  singleNoteDetail.innerHTML = `<h1>${note.noteTitle}</h1><p>${note.noteBody}</p>`
 }
 
 //RUN THE FUNCTION TO DISPLAY NOTES UPON LOADING PAGE
