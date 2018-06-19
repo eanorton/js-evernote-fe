@@ -9,6 +9,8 @@ const form = document.getElementById("form")
 const singleNoteDetail = document.getElementById("note-detail")
 
 
+//------- FETCHES -----------------------------------------------------------------
+
 
 // FETCH ALL USERS
 function fetchUsers() {
@@ -20,13 +22,53 @@ function fetchNotes() {
   fetch(noteApiUrl).then(response=>response.json()).then(allNotes=>displayNotes(allNotes))
 }
 
+// FUNCTION TO POST A NEW NOTEOBJECT AND PERSIST TO DATABASE, (ADDS TO BOTTOM)
+function makeNewNote(newNote){
+  let noteElements = Array.from(newNote.children)
+
+  let configObj = {
+    method:"POST",
+    body:JSON.stringify({title: `${noteElements[1].value}`, body: `${noteElements[3].value}`,user_id:2}),
+    headers:{'Content-Type':'application/json'}
+  }
+
+  fetch(noteApiUrl, configObj).then(response=>response.json()).then(fetchNotes)
+
+  noteElements[1].value = ""
+  noteElements[3].value = ""
+}
+
+//FUNCTION TO DELETE NOTEOBJ FROM DATABASE AND REMOVE FROM OUR LIST
+function deleteNote(id){
+  let configObj = {
+    method:"DELETE"
+  }
+  fetch(`${noteApiUrl}/${id}`, configObj).then(fetchNotes)
+}
+
+//FUNCTION TO UPDATE NOTEOBJ - CURRENTLY TAKING IN VALUE FROM THE NEW NOTEFIELD
+function updateNote(note){
+  let noteElements = Array.from(note.children)
+
+  let configObj = {
+    method:"PATCH",
+    body:JSON.stringify({title: `${noteElements[0].innerText}`, body: `${noteElements[1].innerText}`,user_id:2}),
+    headers:{'Content-Type':'application/json'}
+  }
+
+  fetch(`${noteApiUrl}/${noteElements[4].dataset.noteId}`, configObj).then(fetchNotes)
+}
+
+
+//------------------------------------------------------------------------------
+
+
+//-------DISPLAY----------------------------------------------------------------
+
 // DISPLAY USERS IN CONSOLE TABLE
 function displayUser(allUsers){
   allUsers.forEach(user=>console.table(user))
 }
-
-//h3-data-note-id="${note.id}" data-note-title="${note.title}" data-note-body="${note.body}"
-//p - data-note-id="${note.id}" data-note-body="${note.body}" data-note-title="${note.title}"
 
 // DISPLAY NOTES AS A LIST ON PAGE
 function displayNotes(allNotes){
@@ -66,30 +108,18 @@ function renderNewNoteForm(){
   })
 }
 
-// FUNCTION TO MAKE A NEW NOTEOBJECT AND PERSIST TO DATABASE, AND ADD TO THE BOTTOM OF OUR LIST
-function makeNewNote(newNote){
+function displaySingleNote(note){
+  let noteElements = Array.from(note.children)
 
-  let noteElements = Array.from(newNote.children)
 
-  let configObj = {
-    method:"POST",
-    body:JSON.stringify({title: `${noteElements[1].value}`, body: `${noteElements[3].value}`,user_id:2}),
-    headers:{'Content-Type':'application/json'}
-  }
-
-  fetch(noteApiUrl, configObj).then(response=>response.json()).then(fetchNotes)
-
-  noteElements[1].value = ""
-  noteElements[3].value = ""
+  singleNoteDetail.innerHTML =  `<h1>${noteElements[0].innerText}</h1><p>${noteElements[1].innerText}</p><br><button type="button" class="btn btn-danger" data-note-id="${noteElements[2].dataset.noteId}">${noteElements[2].innerText}</button><button type="button" class="btn btn-primary" data-note-id="${noteElements[3].dataset.noteId}">${noteElements[3].innerText}</button>`
 }
 
-//FUNCTION TO DELETE NOTEOBJ FROM DATABASE AND REMOVE FROM OUR LIST
-function deleteNote(id){
-  let configObj = {
-    method:"DELETE"
-  }
-  fetch(`${noteApiUrl}/${id}`, configObj).then(fetchNotes)
-}
+//------------------------------------------------------------------------------
+
+
+
+
 
 //FUNCTION TO POP UP AN ALERT IN THE WINDOW OBJ TO GET CONFIRMATION THEY WANT TO DELETE NOTEOBJ
 function confirmDelete(id){
@@ -101,20 +131,6 @@ function confirmDelete(id){
     alert("You did not delete your note!");
   }
 }
-
-//FUNCTION TO UPDATE NOTEOBJ - CURRENTLY TAKING IN VALUE FROM THE NEW NOTEFIELD
-function updateNote(note){
-  let noteElements = Array.from(note.children)
-
-  let configObj = {
-    method:"PATCH",
-    body:JSON.stringify({title: `${noteElements[0].innerText}`, body: `${noteElements[1].innerText}`,user_id:2}),
-    headers:{'Content-Type':'application/json'}
-  }
-
-  fetch(`${noteApiUrl}/${noteElements[4].dataset.noteId}`, configObj).then(fetchNotes)
-}
-
 
 
 
@@ -159,8 +175,6 @@ singleNoteDetail.addEventListener('click', function(event){
   }
 })
 
-
-
 //----------------------------------------------------------------------------------------
 
 
@@ -182,12 +196,7 @@ function makeNoteEditable(note){
   }
 }
 
-function displaySingleNote(note){
-  let noteElements = Array.from(note.children)
 
-
-  singleNoteDetail.innerHTML =  `<h1>${noteElements[0].innerText}</h1><p>${noteElements[1].innerText}</p><br><button type="button" class="btn btn-danger" data-note-id="${noteElements[2].dataset.noteId}">${noteElements[2].innerText}</button><button type="button" class="btn btn-primary" data-note-id="${noteElements[3].dataset.noteId}">${noteElements[3].innerText}</button>`
-}
 
 //RUN THE FUNCTION TO DISPLAY NOTES UPON LOADING PAGE
 
