@@ -9,7 +9,10 @@ const form = document.getElementById("form")
 const singleNoteDetail = document.getElementById("note-detail")
 
 
+
 //------- FETCHES -----------------------------------------------------------------
+
+
 
 
 // FETCH ALL USERS
@@ -17,10 +20,14 @@ function fetchUsers() {
   fetch(userApiUrl).then(response=>response.json()).then(allUsers=>displayUser(allUsers))
 }
 
+
+
 // FETCH ALL NOTES
 function fetchNotes() {
   fetch(noteApiUrl).then(response=>response.json()).then(allNotes=>displayNotes(allNotes))
 }
+
+
 
 // FUNCTION TO POST A NEW NOTEOBJECT AND PERSIST TO DATABASE, (ADDS TO BOTTOM)
 function makeNewNote(newNote){
@@ -28,15 +35,17 @@ function makeNewNote(newNote){
 
   let configObj = {
     method:"POST",
-    body:JSON.stringify({title: `${noteElements[1].value}`, body: `${noteElements[3].value}`,user_id:2}),
+    body:JSON.stringify({title: `${noteElements[2].value}`, body: `${noteElements[4].value}`,user_id:2}),
     headers:{'Content-Type':'application/json'}
   }
 
   fetch(noteApiUrl, configObj).then(response=>response.json()).then(fetchNotes)
 
-  noteElements[1].value = ""
-  noteElements[3].value = ""
+  noteElements[2].value = ""
+  noteElements[4].value = ""
 }
+
+
 
 //FUNCTION TO DELETE NOTEOBJ FROM DATABASE AND REMOVE FROM OUR LIST
 function deleteNote(id){
@@ -45,6 +54,8 @@ function deleteNote(id){
   }
   fetch(`${noteApiUrl}/${id}`, configObj).then(fetchNotes)
 }
+
+
 
 //FUNCTION TO UPDATE NOTEOBJ - CURRENTLY TAKING IN VALUE FROM THE NEW NOTEFIELD
 function updateNote(note){
@@ -76,18 +87,25 @@ function displayNotes(allNotes){
   allNotes.forEach(note=>noteList.innerHTML += `<li class="list-group-item" ><h3 class="note-header">${note.title}</h3><p class="note-body" id="body">${note.body}</p> <button type="button" class="btn btn-danger" data-note-id="${note.id}">Delete</button><button type="button" class="btn btn-primary" class="update" data-note-id="${note.id}">Update</button></li>`)
 }
 
-//FUNCTION TO SHORTEN THE AMOUNT OF NOTECONTENT THAT IS DISPLAYED
-function truncateNoteContent(body) {
-
-  var res = body.substring(0, 100) + "...";
-  return res;
-}
+// DISPLAY TRUNCATED NOTECONTENT ON THE LEFT OF SCREEN
+// function displayTruncatedNotes(){
+//
+//   let allNotes = Array.from(noteList.children)
+//
+//   //FUNCTION TO SHORTEN THE AMOUNT OF NOTECONTENT THAT IS DISPLAYED
+//   function truncateNoteContent(allNotes) {
+//
+//     allNotes.forEach(note=>noteList.children[0].children[1].innerHTML = note.children[1].innerText.substring(0, 20)+"............")
+//
+//   }
+//   truncateNoteContent(allNotes);
+// }
 
 function renderNewNoteForm(){
 
   singleNoteDetail.innerHTML = ""
 
-  singleNoteDetail.innerHTML += `<div id="new-note-form" class="form-group">
+  singleNoteDetail.innerHTML += `<div class="panel-heading" id="new-note-form"><div class="form-group"><h1>NEW NOTE</h1></div>
     <label for="Title">NOTE TITLE</label>
     <textarea class="form-control" id="new-title" rows="1"></textarea>
     <label for="Content">NOTE CONTENT</label>
@@ -103,6 +121,7 @@ function renderNewNoteForm(){
   newNoteForm.addEventListener('click', function(event){
 
     if (event.target.innerText === "SAVE NOTE"){
+
       makeNewNote(event.target.parentElement)
     }
   })
@@ -112,7 +131,7 @@ function displaySingleNote(note){
   let noteElements = Array.from(note.children)
 
 
-  singleNoteDetail.innerHTML =  `<h1>${noteElements[0].innerText}</h1><p>${noteElements[1].innerText}</p><br><button type="button" class="btn btn-danger" data-note-id="${noteElements[2].dataset.noteId}">${noteElements[2].innerText}</button><button type="button" class="btn btn-primary" data-note-id="${noteElements[3].dataset.noteId}">${noteElements[3].innerText}</button>`
+  singleNoteDetail.innerHTML =  `<div class="panel-heading"><h1>${noteElements[0].innerText}</h1></div><div class="panel-body"><p>${noteElements[1].innerText}</p></div><br><button type="button" class="btn btn-danger" data-note-id="${noteElements[2].dataset.noteId}">${noteElements[2].innerText}</button><button type="button" class="btn btn-primary" data-note-id="${noteElements[3].dataset.noteId}">${noteElements[3].innerText}</button></div>`
 }
 
 //------------------------------------------------------------------------------
@@ -141,7 +160,8 @@ function confirmDelete(id){
 noteList.addEventListener('click', function(event){
 
   if (event.target.className === "btn btn-primary"){
-    displaySingleNote(event.target.parentElement)//updateNote(event.target.dataset.noteId)
+    displaySingleNote(event.target.parentElement)
+    //updateNote(event.target.dataset.noteId)
   } else if (event.target.className === "btn btn-danger"){
     confirmDelete(event.target.dataset.noteId)
   } else if(event.target.className === "note-header" || event.target.className === "note-body"){
@@ -153,7 +173,8 @@ noteList.addEventListener('click', function(event){
 form.addEventListener('click', function(event){
   event.preventDefault()
 
-  if (event.target.innerText === "NEW NOTE"){
+  if (event.target.className === "btn btn-success"){
+
     renderNewNoteForm();
   }
   // noteContent.value = "";
@@ -179,6 +200,28 @@ singleNoteDetail.addEventListener('click', function(event){
 
 
 
+
+// //FUNCTION TO MAKE SINGLE NOTEDETAIL EDITABLE. IF THEY EDIT, SEND TO PATCH
+// function makeNoteEditable(note){
+//   let noteElements = Array.from(note.children)
+//
+//
+//   singleNoteDetail.addEventListener('click', function(event){
+//
+//     if(event.target.className === "btn btn-primary"){
+//       noteElements[1].innerHTML = `<div id="update-note-form" class="form-group">
+//         <label for="Title"> TITLE</label>
+//         <textarea class="form-control" id="new-title" rows="1">${noteElements[0].innerText}</textarea>
+//         <label for="Content"> CONTENT</label>
+//         <textarea class="form-control" id="new-body" rows="3">${noteElements[1].innerText}</textarea>
+//         <br>
+//       </div>`
+//       noteElements[4].innerText = "Save"
+//     } else if (event.target.innerText === "Update") {
+//       noteElements[4].innerText = "Update"
+//     }
+//   })
+// }
 
 //FUNCTION TO MAKE SINGLE NOTEDETAIL EDITABLE. IF THEY EDIT, SEND TO PATCH
 function makeNoteEditable(note){
