@@ -13,20 +13,16 @@ const singleNoteDetail = document.getElementById("note-detail")
 //------- FETCHES -----------------------------------------------------------------
 
 
-
-
 // FETCH ALL USERS
 function fetchUsers() {
   fetch(userApiUrl).then(response=>response.json()).then(allUsers=>displayUser(allUsers))
 }
 
 
-
 // FETCH ALL NOTES
 function fetchNotes() {
   fetch(noteApiUrl).then(response=>response.json()).then(allNotes=>displayNotes(allNotes))
 }
-
 
 
 // FUNCTION TO POST A NEW NOTEOBJECT AND PERSIST TO DATABASE, (ADDS TO BOTTOM)
@@ -46,7 +42,6 @@ function makeNewNote(newNote){
 }
 
 
-
 //FUNCTION TO DELETE NOTEOBJ FROM DATABASE AND REMOVE FROM OUR LIST
 function deleteNote(id){
   let configObj = {
@@ -54,7 +49,6 @@ function deleteNote(id){
   }
   fetch(`${noteApiUrl}/${id}`, configObj).then(fetchNotes)
 }
-
 
 
 //FUNCTION TO UPDATE NOTEOBJ - CURRENTLY TAKING IN VALUE FROM THE NEW NOTEFIELD
@@ -70,7 +64,7 @@ function updateNote(note){
 
   fetch(`${noteApiUrl}/${noteElements[6].dataset.noteId}`, configObj).then(fetchNotes)
 
-  
+
   singleNoteDetail.innerHTML = `<div class="panel-heading"><h1>${noteElements[2].value}</h1></div><div class="panel-body"><p>${noteElements[4].value}</p></div><br>`
 }
 
@@ -88,7 +82,7 @@ function displayUser(allUsers){
 // DISPLAY NOTES AS A LIST ON PAGE
 function displayNotes(allNotes){
   noteList.innerHTML = ""
-  allNotes.forEach(note=>noteList.innerHTML += `<li class="list-group-item" ><h3 class="note-header">${note.title}</h3><p class="note-body" id="body">${note.body}</p> <button type="button" class="btn btn-danger" data-note-id="${note.id}">Delete</button><button type="button" class="btn btn-primary" class="update" data-note-id="${note.id}">Update</button></li>`)
+  allNotes.forEach(note=>noteList.innerHTML += `<a href="#" class="list-group-item list-group-item-action list-group-item-light"><h3 class="note-header">${note.title}</h3><p class="note-body" id="body">${note.body}</p> <button type="button" class="btn btn-danger" data-note-id="${note.id}">Delete</button><button type="button" class="btn btn-primary" class="update" data-note-id="${note.id}">Update</button></a>`)
 }
 
 // DISPLAY TRUNCATED NOTECONTENT ON THE LEFT OF SCREEN
