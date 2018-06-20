@@ -8,7 +8,7 @@
     <style>
     body {
       padding: 20px;
-      background-image: url("https://images.unsplash.com/photo-1516053256215-94022213b13c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=703a399feb6c6139d4e355122c0ef2cc&auto=format&fit=crop&w=3367&q=80");
+      background-image: url("https://images.unsplash.com/photo-1518600654093-2a24cddafa38?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=96238af4ac6e58d17d362d5b8b846eb4&auto=format&fit=crop&w=3434&q=80");
     }
     img {
       max-height: 200px;
@@ -17,10 +17,23 @@
       width: 100%;
     }
 
+    min-height: 100vh;
+      }
+      .flex-fill {
+         flex: 1 1 auto;
+      }
+      .bg {
+          background-image: url("https://images.unsplash.com/photo-1518600654093-2a24cddafa38?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=96238af4ac6e58d17d362d5b8b846eb4&auto=format&fit=crop&w=3434&q=80");
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+      }
+
+
   </style>
   </head>
   <body>
-
+    <div class="bg flex-fill">
 
     <div>
 
@@ -39,6 +52,8 @@
 
           <div class='col-md-4'>
             <ul class="list-group" id="note-list">
+              <div class="accordion" id="accordionExample">
+              </div>
             </ul>
           </div>
 
@@ -55,6 +70,6 @@
     <br><br>
 
     <script src="index.js"></script>
-
+  </div>
   </body>
 </html>

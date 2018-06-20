@@ -82,7 +82,10 @@ function displayUser(allUsers){
 // DISPLAY NOTES AS A LIST ON PAGE
 function displayNotes(allNotes){
   noteList.innerHTML = ""
-  allNotes.forEach(note=>noteList.innerHTML += `<a href="#" class="list-group-item list-group-item-action list-group-item-light"><h3 class="note-header">${note.title}</h3><p class="note-body" id="body">${note.body}</p> <button type="button" class="btn btn-danger" data-note-id="${note.id}">Delete</button><button type="button" class="btn btn-primary" class="update" data-note-id="${note.id}">Update</button></a>`)
+
+  allNotes.forEach(note=>noteList.innerHTML +=
+    `<a href="#" class="list-group-item list-group-item-action"><h3 class="note-header">${note.title}</h3><p class="note-body" id="body">${note.body}</p> <button type="button" class="btn btn-danger" data-note-id="${note.id}">Delete</button><button type="button" class="btn btn-primary" class="update" data-note-id="${note.id}">Update</button></a>`
+  )
 }
 
 // DISPLAY TRUNCATED NOTECONTENT ON THE LEFT OF SCREEN
@@ -109,7 +112,7 @@ function renderNewNoteForm(){
     <label for="Content">NOTE CONTENT</label>
     <textarea class="form-control" id="new-body" rows="16"></textarea>
     <br>
-    <button type="button" class="btn btn-success">SAVE NOTE</button>
+    <button type="button" class="btn btn-success">SAVE NOTE</button><br>
   </div>`
 
   let newNoteTitle = document.getElementById("new-title")
@@ -130,7 +133,7 @@ function displaySingleNote(note){
   let noteElements = Array.from(note.children)
 
 
-  singleNoteDetail.innerHTML =  `<div class="panel-heading"><h1>${noteElements[0].innerText}</h1></div><div class="panel-body"><p>${noteElements[1].innerText}</p></div><br><button type="button" class="btn btn-danger" data-note-id="${noteElements[2].dataset.noteId}">${noteElements[2].innerText}</button><button type="button" class="btn btn-primary" data-note-id="${noteElements[3].dataset.noteId}">${noteElements[3].innerText}</button></div>`
+  singleNoteDetail.innerHTML =  `<div class="panel-heading"><h1>${noteElements[0].innerText}</h1></div><div class="panel-body"><p>${noteElements[1].innerText}</p></div><br><button type="button" class="btn btn-danger" data-note-id="${noteElements[2].dataset.noteId}">${noteElements[2].innerText}</button><button type="button" class="btn btn-primary" data-note-id="${noteElements[3].dataset.noteId}">${noteElements[3].innerText}</button><br></div>`
 }
 
 //------------------------------------------------------------------------------
@@ -159,7 +162,7 @@ function confirmDelete(id){
 noteList.addEventListener('click', function(event){
 
   if (event.target.className === "btn btn-primary"){
-    displaySingleNote(event.target.parentElement)
+    makeNoteEditable(event.target.parentElement)
     //updateNote(event.target.dataset.noteId)
   } else if (event.target.className === "btn btn-danger"){
     confirmDelete(event.target.dataset.noteId)
