@@ -89,17 +89,17 @@ function displayNotes(allNotes){
 }
 
 //DISPLAY TRUNCATED NOTECONTENT ON THE LEFT OF SCREEN *** This alters the text for the note object itself - not just display
-function displayTruncatedNotes(){
-  let arr = Array.from(noteList.children)
-  arr.forEach(obj => {
-    newArr = Array.from(obj.children)
-    let noteText = newArr[1].innerText;
-    if (noteText.length > 10){
-      let newNoteText = noteText.substr(0,10) + "..."
-      newArr[1].innerHTML = newNoteText
-    }
-  })
-}
+// function displayTruncatedNotes(){
+//   let arr = Array.from(noteList.children)
+//   arr.forEach(obj => {
+//     newArr = Array.from(obj.children)
+//     let noteText = newArr[1].innerText;
+//     if (noteText.length > 10){
+//       let newNoteText = noteText.substr(0,10) + "..."
+//       newArr[1].innerHTML = newNoteText
+//     }
+//   })
+// }
 
 function renderNewNoteForm(){
 
@@ -165,7 +165,7 @@ noteList.addEventListener('click', function(event){
     //updateNote(event.target.dataset.noteId)
   } else if (event.target.className === "btn btn-danger"){
     confirmDelete(event.target.dataset.noteId)
-  } else if(event.target.className === "note-header" || event.target.className === "note-body"){
+  } else if(event.target.className === "note-header" || event.target.className === "note-body truncated"){
     displaySingleNote(event.target.parentElement)
   }
 })
