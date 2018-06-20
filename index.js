@@ -39,6 +39,8 @@ function makeNewNote(newNote){
 
   noteElements[2].value = ""
   noteElements[4].value = ""
+
+
 }
 
 
@@ -132,7 +134,8 @@ function displaySingleNote(note){
   let noteElements = Array.from(note.children)
 
 
-  singleNoteDetail.innerHTML =  `<div class="panel-heading"><h1>${noteElements[0].innerText}</h1></div><div class="panel-body"><p>${noteElements[1].innerText}</p></div><br><button type="button" class="btn btn-danger" data-note-id="${noteElements[2].dataset.noteId}">${noteElements[2].innerText}</button><button type="button" class="btn btn-primary" data-note-id="${noteElements[3].dataset.noteId}">${noteElements[3].innerText}</button><br></div>`
+  singleNoteDetail.innerHTML =
+  `<div class="panel-heading"><h1>${noteElements[0].innerText}</h1></div><div class="panel-body"><p>${noteElements[1].innerText}</p></div><br><button type="button" class="btn btn-danger" data-note-id="${noteElements[2].dataset.noteId}">${noteElements[2].innerText}</button><button type="button" class="btn btn-primary" data-note-id="${noteElements[3].dataset.noteId}">${noteElements[3].innerText}</button><br><br></div>`
 }
 
 //------------------------------------------------------------------------------
