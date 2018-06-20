@@ -88,19 +88,18 @@ function displayNotes(allNotes){
   )
 }
 
-// DISPLAY TRUNCATED NOTECONTENT ON THE LEFT OF SCREEN
-// function displayTruncatedNotes(){
-//
-//   let allNotes = Array.from(noteList.children)
-//
-//   //FUNCTION TO SHORTEN THE AMOUNT OF NOTECONTENT THAT IS DISPLAYED
-//   function truncateNoteContent(allNotes) {
-//
-//     allNotes.forEach(note=>noteList.children[0].children[1].innerHTML = note.children[1].innerText.substring(0, 20)+"............")
-//
-//   }
-//   truncateNoteContent(allNotes);
-// }
+//DISPLAY TRUNCATED NOTECONTENT ON THE LEFT OF SCREEN *** This alters the text for the note object itself - not just display
+function displayTruncatedNotes(){
+  let arr = Array.from(noteList.children)
+  arr.forEach(obj => {
+    newArr = Array.from(obj.children)
+    let noteText = newArr[1].innerText;
+    if (noteText.length > 10){
+      let newNoteText = noteText.substr(0,10) + "..."
+      newArr[1].innerHTML = newNoteText
+    }
+  })
+}
 
 function renderNewNoteForm(){
 
@@ -229,7 +228,7 @@ function makeNoteEditable(note){
   })
 }
 
-// //FUNCTION TO MAKE SINGLE NOTEDETAIL EDITABLE. IF THEY EDIT, SEND TO PATCH
+// //FUNCTION TO MAKE SINGLE NOTEDETAIL EDITABLE (ONLY BY DOING CONTENT EDITABLE FUNCTION STRAIGHT IN DOM). IF THEY EDIT, SEND TO PATCH
 // function makeNoteEditable(note){
 //   let noteElements = Array.from(note.children)
 //   noteElements[0].contentEditable = "false"
