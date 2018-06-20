@@ -167,6 +167,8 @@ noteList.addEventListener('click', function(event){
     confirmDelete(event.target.dataset.noteId)
   } else if(event.target.className === "note-header" || event.target.className === "note-body truncated"){
     displaySingleNote(event.target.parentElement)
+  } else if (event.target.className === "list-group-item list-group-item-action"){
+    displaySingleNote(event.target)
   }
 })
 
