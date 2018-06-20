@@ -76,7 +76,7 @@ function updateNote(note){
 
 // DISPLAY USERS IN CONSOLE TABLE
 function displayUser(allUsers){
-  allUsers.forEach(user=>console.table(user))
+  allUsers.forEach(user=>console.log(user))
 }
 
 // DISPLAY NOTES AS A LIST ON PAGE
@@ -84,7 +84,7 @@ function displayNotes(allNotes){
   noteList.innerHTML = ""
 
   allNotes.forEach(note=>noteList.innerHTML +=
-    `<a href="#" class="list-group-item list-group-item-action"><h3 class="note-header">${note.title}</h3><p class="note-body" id="body">${note.body}</p> <button type="button" class="btn btn-danger" data-note-id="${note.id}">Delete</button><button type="button" class="btn btn-primary" class="update" data-note-id="${note.id}">Update</button></a>`
+    `<a href="#" class="list-group-item list-group-item-action"><h3 class="note-header">${note.title}</h3><p class="note-body truncated" id="body">${note.body}</p> <button type="button" class="btn btn-danger" data-note-id="${note.id}">Delete</button><button type="button" class="btn btn-primary" class="update" data-note-id="${note.id}">Update</button></a>`
   )
 }
 
